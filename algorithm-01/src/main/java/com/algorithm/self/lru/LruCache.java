@@ -1,4 +1,4 @@
-package com.algorithm.self;
+package com.algorithm.self.lru;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -8,22 +8,7 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author <a href='mailto:likeguo@apache.com'> likeguo </a>
  */
-public class LruCache<T> {
-    
-    public static void main(String[] args) {
-        final LruCache<Object> lruCache = new LruCache<>(3);
-        lruCache.put("1", "1");
-        lruCache.put("2", "2");
-        lruCache.put("3", "3");
-        lruCache.put("4", "4");
-        lruCache.print();
-        lruCache.put("5", "5");
-        lruCache.put("6", "6");
-        lruCache.get("4");
-        lruCache.put("7", "7");
-        lruCache.print();
-        
-    }
+public class LruCache<T> implements Lru<T> {
     
     private final ConcurrentMap<String, LruLinkedNode<T>> cache = new ConcurrentHashMap<>();
     
@@ -46,18 +31,18 @@ public class LruCache<T> {
         tail.pre = head;
     }
     
+    @Override
     public T get(final String key) {
         LruLinkedNode<T> node = cache.get(key);
         if (node == null) {
             // should raise exception here.
             return null;
         }
-        
         moveToHead(node);
         return node.value;
     }
     
-    
+    @Override
     public void put(final String key, final T value) {
         LruLinkedNode<T> node = cache.get(key);
         if (node != null) {
@@ -79,6 +64,7 @@ public class LruCache<T> {
         }
     }
     
+    @Override
     public void print() {
         StringBuilder builder = new StringBuilder("[\n");
         LruLinkedNode<T> node = head.post;
@@ -121,15 +107,12 @@ public class LruCache<T> {
         return res;
     }
     
-    static class LruLinkedNode<T> {
-        String key;
-        T value;
+    static class LruLinkedNode<T> extends Lru.Node<T> {
         LruLinkedNode<T> pre;
         LruLinkedNode<T> post;
         
         public LruLinkedNode(final String key, final T value) {
-            this.key = key;
-            this.value = value;
+            super(key, value);
         }
         
         public LruLinkedNode() {

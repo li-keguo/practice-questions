@@ -58,7 +58,7 @@ public class LruCache<T> {
     }
     
     
-    public void put(String key, T value) {
+    public void put(final String key, final T value) {
         LruLinkedNode<T> node = cache.get(key);
         if (node != null) {
             node.value = value;
@@ -94,7 +94,7 @@ public class LruCache<T> {
         System.out.println(builder);
     }
     
-    private void addNode(LruLinkedNode<T> node) {
+    private void addNode(final LruLinkedNode<T> node) {
         node.pre = head;
         node.post = head.post;
         
@@ -102,7 +102,7 @@ public class LruCache<T> {
         head.post = node;
     }
     
-    private void removeNode(LruLinkedNode<T> node) {
+    private void removeNode(final LruLinkedNode<T> node) {
         LruLinkedNode<T> pre = node.pre;
         LruLinkedNode<T> post = node.post;
         
@@ -110,7 +110,7 @@ public class LruCache<T> {
         post.pre = pre;
     }
     
-    private void moveToHead(LruLinkedNode<T> node) {
+    private void moveToHead(final LruLinkedNode<T> node) {
         removeNode(node);
         addNode(node);
     }

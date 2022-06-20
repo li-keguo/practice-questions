@@ -1,4 +1,4 @@
-package com.algorithm.data;
+package com.algorithm.data.queue;
 
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;

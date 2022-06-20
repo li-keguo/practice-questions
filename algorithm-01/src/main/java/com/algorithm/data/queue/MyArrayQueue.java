@@ -110,10 +110,8 @@ public class MyArrayQueue<T> implements Queue<T> {
         if (size >= capacity) {
             throw new RuntimeException("my queue is full");
         }
-        if (endIndex >= capacity) {
-            endIndex = 0;
-        }
-        queue[endIndex++] = t;
+        endIndex = endIndex >= capacity - 1 ? 0 : endIndex + 1;
+        queue[endIndex] = t;
         size++;
         return true;
     }

@@ -6,6 +6,8 @@ import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * LISP.
@@ -47,7 +49,56 @@ public class LISP {
         cal.print("(sub(mul 2 4) (div 9 3))");
         cal.print("(div 12 (sub 45 45))");
         cal.print("(mul 3 -7)");
+        final RegCal regCal = new RegCal();
+        regCal.print("(sub (mul 2 4) (div 9 3))");
         
+    }
+    
+    static class RegCal {
+        final String regex = "(?<reg>\\((?<ope>sub|mul|div|add) (?<p1>-*\\d+) (?<p2>-*\\d+)\\))";
+        
+        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        
+        void print(String expression) {
+            try {
+                System.out.println("表达式：" + expression);
+                final int result = cal(expression);
+                System.out.println("最终结果：" + result);
+            } catch (Exception e) {
+                System.out.println("error");
+            }
+        }
+        
+        int cal(String expression) {
+            try {
+                return Integer.parseInt(expression);
+            } catch (Exception e) {
+                final Matcher matcher = pattern.matcher(expression);
+                while (matcher.find()) {
+                    System.out.println("Full match: " + matcher.group(0));
+    
+                    for (int i = 1; i <= matcher.groupCount(); i++) {
+                        System.out.println("Group " + i + ": " + matcher.group(i));
+                    }
+                    expression = expression.replace(matcher.group(0), cal(matcher.group(2), matcher.group(3), matcher.group(4)));
+                }
+                return cal(expression);
+            }
+        }
+        
+        private CharSequence cal(String group, String p1, String p2) {
+            switch (group) {
+                case "div":
+                    return (Integer.parseInt(p1) / Integer.parseInt(p2)) + "";
+                case "mul":
+                    return (Integer.parseInt(p1) * Integer.parseInt(p2)) + "";
+                case "sub":
+                    return (Integer.parseInt(p1) - Integer.parseInt(p2)) + "";
+                case "add":
+                    return (Integer.parseInt(p1) + Integer.parseInt(p2)) + "";
+            }
+            return "";
+        }
     }
     
     static class Cal {

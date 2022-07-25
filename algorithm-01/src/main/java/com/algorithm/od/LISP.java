@@ -76,9 +76,11 @@ public class LISP {
                 final Matcher matcher = pattern.matcher(expression);
                 while (matcher.find()) {
                     System.out.println("Full match: " + matcher.group(0));
-    
+                    
                     for (int i = 1; i <= matcher.groupCount(); i++) {
                         System.out.println("Group " + i + ": " + matcher.group(i));
+                        System.out.println("named group reg:" + matcher.group("reg"));
+                        
                     }
                     expression = expression.replace(matcher.group(0), cal(matcher.group(2), matcher.group(3), matcher.group(4)));
                 }

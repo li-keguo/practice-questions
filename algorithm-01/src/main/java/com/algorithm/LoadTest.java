@@ -39,9 +39,7 @@ public class LoadTest {
 
     public static void main(String[] args) {
         Child child = new Child();
-        // 先 static （先父后子）
-        // 后父 （{}，构造）
-        // 再子 （{}，构造）
+
     }
 }
 

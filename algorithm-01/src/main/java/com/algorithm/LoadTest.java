@@ -1,3 +1,5 @@
+package com.algorithm;
+
 public class LoadTest {
 
     static {
